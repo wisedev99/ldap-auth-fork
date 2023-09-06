@@ -62,7 +62,7 @@ const authenticate = (username, password, done) => {
                 } else {
                     if (results.length > 0) {
                         // User exists, update their information in the database
-                        pool.query('UPDATE users SET password = ? WHERE username = ?', [password, username], (err) => {
+                        pool.query(`UPDATE users SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE username = ?`, [password, username], (err) => {
                             if (err) {
                                 done(err);
                             } else {
@@ -71,7 +71,7 @@ const authenticate = (username, password, done) => {
                         });
                     } else {
                         // User doesn't exist, add them to the database
-                        pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], (err) => {
+                        pool.query('INSERT INTO users (fullname, username, password, mail) VALUES (?, ?, ?, ?)', [user.cn, user.uid, password, user.mail], (err) => {
                             if (err) {
                                 done(err);
                             } else {
